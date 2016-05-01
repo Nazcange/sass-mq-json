@@ -20,3 +20,28 @@
   content: $content + '}';
   display: none;
 }
+
+///
+/// Generate a json list of breakpoint for libsass
+/// @require $mq-breakpoints
+///
+@mixin mq-json-libsass() {
+  $length: length($mq-breakpoints);
+  $i: 1;
+  $content: '{';
+
+  @each $breakpoint in $mq-breakpoints {
+    $mq-name: nth($breakpoint, 1);
+    $mq-value: map-get($mq-breakpoints, $mq-name);
+    $content: $content + '"' + $mq-name + '": "' + $mq-value + '"';
+
+    @if ($length != $i) {
+      $content: $content + ', ';
+    }
+    
+    $i: $i + 1;
+  }
+  
+  content: $content + '}';
+  display: none;
+}
