@@ -1,11 +1,11 @@
 html {
-  &:before {
+  &::before {
     @include mq-json();
   }
 }
 
 body {
-  &:before {
+  &::before {
     content: '{"current": "default"}';
     display: none;
 
