@@ -1,0 +1,22 @@
+///
+/// Generate a json list of breakpoint
+/// @require $mq-breakpoints
+///
+@mixin mq-json() {
+  $length: length($mq-breakpoints);
+  $content: '{';
+
+  @each $breakpoint in $mq-breakpoints {
+    $mq-name: nth($breakpoint, 1);
+    $mq-value: map-get($mq-breakpoints, $mq-name);
+    $content: $content + '"' + $mq-name + '": "' + $mq-value + '"';
+
+    $index: index($mq-breakpoints, $mq-name $mq-value);
+    @if ($length != $index) {
+      $content: $content + ', ';
+    }
+  }
+
+  content: $content + '}';
+  display: none;
+}
