@@ -1,34 +1,9 @@
-///
-/// Generate a json list of breakpoint
+/// Generate a json list of breakpoint (for libsass)
 /// @require $mq-breakpoints
-///
-@mixin mq-json() {
+@function mq-json() {
   $length: length($mq-breakpoints);
   $content: '{';
-
-  @each $breakpoint in $mq-breakpoints {
-    $mq-name: nth($breakpoint, 1);
-    $mq-value: map-get($mq-breakpoints, $mq-name);
-    $content: $content + '"' + $mq-name + '": "' + $mq-value + '"';
-
-    $index: index($mq-breakpoints, $mq-name $mq-value);
-    @if ($length != $index) {
-      $content: $content + ', ';
-    }
-  }
-
-  content: $content + '}';
-  display: none;
-}
-
-///
-/// Generate a json list of breakpoint for libsass
-/// @require $mq-breakpoints
-///
-@mixin mq-json-libsass() {
-  $length: length($mq-breakpoints);
   $i: 1;
-  $content: '{';
 
   @each $breakpoint in $mq-breakpoints {
     $mq-name: nth($breakpoint, 1);
@@ -38,10 +13,31 @@
     @if ($length != $i) {
       $content: $content + ', ';
     }
-    
+
     $i: $i + 1;
   }
   
-  content: $content + '}';
-  display: none;
+ @return $content + '}';
+}
+
+/// Expose a json list of breakpoints and the current breakpoint
+/// @require mq-json()
+@mixin mq-expose() {
+  html::before {
+    content: mq-json();
+    display: none;
+  }
+  
+  body::before {
+    content: '{"current": "default"}';
+    display: none;
+
+    @each $breakpoint in $mq-breakpoints {
+      $mq-name: nth($breakpoint, 1);
+
+      @include mq($mq-name) {
+        content: '{"current": "#{$mq-name}"}';
+      }
+    }
+  }
 }
