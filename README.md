@@ -1,15 +1,12 @@
 # sass-mq-json
 
-Inspired by [SassyJSON](https://github.com/HugoGiraudel/SassyJSON) and working in harmony with  [sass-mq](https://github.com/sass-mq/sass-mq). 
+Inspired by [SassyJSON](https://github.com/HugoGiraudel/SassyJSON) and [o-grid](https://github.com/Financial-Times/o-grid/blob/master/main.scss#L25).
+Working in harmony with  [sass-mq](https://github.com/sass-mq/sass-mq). 
 
 Useful to provide the breakpoints list to the JavaScript.
 
-Use ``_base-html.scss`` to provide the current breakpoint through ``body::before`` and  expose the list through ``html::before`` to the JavaScript.
+``$mq-breakpoints`` should be a map of breakpoint like in sass-mq.
 
-``@mixin mq-json`` generate a json with the breakpoints list. This list will be in the ``content``.
+Use ``@include mq-expose();`` to provide the current breakpoint through ``body::before`` and expose the list through ``html::before`` to the JavaScript.
 
-This will be expose by ``_base-html.scss`` in the pseudo-element ``html::before``.
-
-``body::before`` expose the current breakpoint.
-
-``@mixin mq-json`` is coded for the compiler sass Ruby, ``@mixin mq-json-libsass`` is coded for the compiler libsass.
+``@function mq-json`` generate a json with the breakpoints list.
