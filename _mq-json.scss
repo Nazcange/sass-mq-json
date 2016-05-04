@@ -1,16 +1,15 @@
-/// Generate a json list of breakpoint (for libsass)
-/// @require $mq-breakpoints
-@function mq-json() {
-  $length: length($mq-breakpoints);
+/// Generate a json list of breakpoint
+/// @param {map} $mq-map [$mq-breakpoints] - A map of breakpoint. Default value is $mq-breakpoints from sass-mq
+@function mq-json($mq-map: $mq-breakpoints) {
+  $length: length($mq-map);
   $content: '{';
   $i: 1;
 
-  @each $breakpoint in $mq-breakpoints {
+  @each $breakpoint, $mq-value in $mq-map {
     $mq-name: nth($breakpoint, 1);
-    $mq-value: map-get($mq-breakpoints, $mq-name);
     $content: $content + '"' + $mq-name + '": "' + $mq-value + '"';
 
-    @if ($length != $i) {
+    @if ($length != $i) { 
       $content: $content + ', ';
     }
 
@@ -20,11 +19,12 @@
  @return $content + '}';
 }
 
-/// Expose a json list of breakpoints and the current breakpoint
-/// @require mq-json()
-@mixin mq-expose() {
+/// Expose a json list of breakpoints and the current breakpoint.
+/// Require mixin mq <https://github.com/sass-mq/sass-mq>
+/// @param {map} $mq-map [$mq-breakpoints] - A map of breakpoint. Default value is $mq-breakpoints from sass-mq
+@mixin mq-expose($mq-map: $mq-breakpoints) {
   html::before {
-    content: mq-json();
+    content: mq-json($mq-map);
     display: none;
   }
   
@@ -32,7 +32,7 @@
     content: '{"current": "default"}';
     display: none;
 
-    @each $breakpoint in $mq-breakpoints {
+    @each $breakpoint in $mq-map {
       $mq-name: nth($breakpoint, 1);
 
       @include mq($mq-name) {
